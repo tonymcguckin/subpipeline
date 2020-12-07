@@ -1,0 +1,149 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-e2e-tests
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: run-e2e-test-1
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-2
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-3
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-4
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-5
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-6
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-7
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-1
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-8
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-9
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+    - name: run-e2e-test-10
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "running test 1";
+          sleep 3s;
+          echo "done!"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-api-tests
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: run-api-tests
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Running API tests..."
+          sleep 15s;
+          echo "done!"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-cleanup-tests
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: run-cleanup-tests
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Clean up tests";
+          sleep 2s;
+          echo "done!"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: cleanup
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "cleanup"
