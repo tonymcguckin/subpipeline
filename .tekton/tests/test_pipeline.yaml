@@ -27,6 +27,11 @@ spec:
       runAfter: [run-e2e-tests,run-api-tests]
       taskRef:
         name: run-cleanup-tests
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: revision
+          value: $(params.revision)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc

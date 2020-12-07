@@ -109,6 +109,12 @@ kind: Task
 metadata:
   name: run-cleanup-tests
 spec: 
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the revision
+      default: master
   workspaces:
   - name: task-pvc
     mountPath: /artifacts           
@@ -120,6 +126,8 @@ spec:
         - set -e -o pipefail;
           echo "Clean up tests";
           sleep 2s;
+          echo $(params.repository);
+          echo $(params.revision);
           echo "done!"
 ---
 apiVersion: tekton.dev/v1beta1
