@@ -8,21 +8,6 @@ spec:
       description: The git repo
     - name: revision
       description: the branch for the git repo
-    - name: apikey
-      description: the ibmcloud api key
-    - name: registryNamespace
-      description: the ibmcloud registry namespace
-    - name: registryRegion
-      description: the ibmcloud registry region
-      default: us-south
-    - name: cluster
-      description: The IBM Cloud Kubernetes cluster name
-    - name: clusterRegion
-      description: The IBM Cloud Kubernetes cluster region
-      default: us-south
-    - name: clusterNamespace
-      description: The Kubernetes cluster namespace
-      default: prod
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -41,7 +26,7 @@ spec:
         name: pipelinerun-$(uid)
       spec:
         pipelineRef:
-            name: pipeline
+            name: deploy-pipeline
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
@@ -51,18 +36,8 @@ spec:
           value: $(params.repository)
         - name: revision
           value: $(params.revision)
-        - name: apikey
-          value: $(params.apikey)
-        - name: registryNamespace
-          value: $(params.registryNamespace)
-        - name: registryRegion
-          value: $(params.registryRegion)
         - name: cluster
           value: $(params.cluster)
-        - name: clusterRegion
-          value: $(params.clusterRegion)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -74,11 +49,13 @@ spec:
       value: "https://github.com/open-toolchain/hello-tekton"
     - name: revision
       value: "master"
+    - name: cluster
+      value: "bog-cluster"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: listener
+  name: deploy-listener
 spec:
   triggers:
     - binding:
