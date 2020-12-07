@@ -5,14 +5,7 @@ metadata:
 spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts
-  stepTemplate:
-    env:
-      - name: BREAK_GLASS
-        valueFrom:
-          configMapKeyRef:
-            name: environment-properties
-            value: break_glass         
+    mountPath: /artifacts         
   steps:
     - name: run-e2e-test-1
       image: ibmcom/pipeline-base-image
@@ -92,14 +85,7 @@ metadata:
 spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts  
-  stepTemplate:
-    env:
-      - name: BREAK_GLASS
-        valueFrom:
-          configMapKeyRef:
-            name: environment-properties
-            value: break_glass         
+    mountPath: /artifacts         
   steps:
     - name: run-api-tests
       image: ibmcom/pipeline-base-image
@@ -117,14 +103,7 @@ metadata:
 spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts
-  stepTemplate:
-    env:
-      - name: BREAK_GLASS
-        valueFrom:
-          configMapKeyRef:
-            name: environment-properties
-            value: break_glass           
+    mountPath: /artifacts         
   steps:
     - name: run-cleanup-tests
       image: ibmcom/pipeline-base-image
