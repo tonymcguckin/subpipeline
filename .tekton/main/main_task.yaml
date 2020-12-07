@@ -81,14 +81,18 @@ metadata:
 spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts         
+    mountPath: /artifacts    
+  results:
+      - name: localpipeline-run-deploy
+        description: deploy pipeline to run - name mapped to real file in pipelines-final.json    
   steps:
     - name: deploy-with-kubectl
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "deploy"
+          echo "Launching deploy pipeline";
+          echo -n "deployer.json" > $(results.localpipeline-run-deploy.path);
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -105,6 +109,16 @@ spec:
       args:
         - set -e -o pipefail;
           echo "wait-for-deploy"
+          if [[ -z "${BREAK_GLASS}" ]]; then
+            echo "Running in reguar mode, will curl for pipeline to finish"
+          else
+            echo "Break glass mode detected"
+            while [ "$(kubectl get pipelinerun --selector=localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+              echo "Waiting for deploy pipleinerun to finish"
+              sleep 5
+            done
+            echo "Done!"
+          fi
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
