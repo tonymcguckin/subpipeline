@@ -63,14 +63,6 @@ spec:
           echo "running test 1";
           sleep 3s;
           echo "done!"
-    - name: run-e2e-test-1
-      image: ibmcom/pipeline-base-image
-      command: ["/bin/bash", "-c"]
-      args:
-        - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
-          echo "done!"
     - name: run-e2e-test-8
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
