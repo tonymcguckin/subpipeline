@@ -129,7 +129,15 @@ metadata:
 spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts         
+    mountPath: /artifacts   
+  stepTemplate:
+    env:
+      - name: BREAK_GLASS
+        valueFrom:
+          configMapKeyRef:
+            name: environment-properties
+            key: break_glass
+            optional: true        
   steps:
     - name: cleanup
       image: ibmcom/pipeline-base-image
