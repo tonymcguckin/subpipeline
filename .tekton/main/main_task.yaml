@@ -77,7 +77,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: validate-task
+  name: deploy
 spec: 
   workspaces:
   - name: task-pvc
@@ -88,101 +88,37 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          kubectl get ns
+          echo "deploy"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-task
-spec:
-  params:
-    - name: repository
-      description: the git repo
-    - name: revision
-      description: the revision
-      default: master
-    - name: apikey
-      description: the ibmcloud api key
-    - name: api
-      description: the ibmcloud api endpoint
-      default: "https://cloud.ibm.com"
-    - name: deployment-file
-      default: deployment.yml
-    - name: clusterNamespace
-      default: prod
-    - name: cluster
-      description: The IBM Cloud Kubernetes cluster name
-    - name: clusterRegion
-      description: The IBM Cloud Kubernetes cluster region
+  name: wait-for-deploy
+spec: 
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts  
+    mountPath: /artifacts         
   steps:
-    - name: clone-repo
-      image: alpine/git
-      env:
-        - name: REPOSITORY
-          value: $(params.repository)
-        - name: REVISION
-          value: $(params.revision)
-      command: ["/bin/sh", "-c"]
-      args:
-        - set -e -o pipefail;
-          echo "Cloning $REPOSITORY";
-          cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
-    - name: pre-deploy-check
+    - name: check-vulnerabilities
       image: ibmcom/pipeline-base-image
-      env:
-        - name: IBMCLOUD_API_KEY
-          value: $(params.apikey)
-        - name: API
-          value: $(params.api)
-        - name: REGION
-          value: $(params.clusterRegion)
-        - name: HOME
-          value: "/root"
-        - name: DEPLOYMENT_FILE
-          value: $(params.deployment-file)
-        - name: CLUSTER_NAMESPACE
-          value: $(params.clusterNamespace)
-        - name: PIPELINE_KUBERNETES_CLUSTER_NAME
-          value: $(params.cluster)
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          ibmcloud login -a $API -r $REGION;
-          cd /workspace;
-          export IKS_BETA_VERSION=1;
-          ibmcloud ks cluster config -c "${PIPELINE_KUBERNETES_CLUSTER_NAME}";
-          if which oc > /dev/null && ibmcloud ks cluster get -c "${PIPELINE_KUBERNETES_CLUSTER_NAME}" --json | jq -e '.type=="openshift"' > /dev/null; then oc login -u apikey -p "${IBMCLOUD_API_KEY}" ; fi;
-          while read line; do export $line; done < /artifacts/build.properties;
-          cp /artifacts/build.properties .;
-          cd /workspace && source pre-deploy-check.sh;
-    - name: deploy-to-kubernetes
+          echo "wait-for-deploy"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: check-vulnerabilities
       image: ibmcom/pipeline-base-image
-      env:
-        - name: IBMCLOUD_API_KEY
-          value: $(params.apikey)
-        - name: API
-          value: $(params.api)
-        - name: REGION
-          value: $(params.clusterRegion)
-        - name: HOME
-          value: "/root"
-        - name: DEPLOYMENT_FILE
-          value: $(params.deployment-file)
-        - name: CLUSTER_NAMESPACE
-          value: $(params.clusterNamespace)
-        - name: PIPELINE_KUBERNETES_CLUSTER_NAME
-          value: $(params.cluster)
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          ibmcloud login -a $API -r $REGION;
-          export IKS_BETA_VERSION=1;
-          ibmcloud ks cluster config -c "${PIPELINE_KUBERNETES_CLUSTER_NAME}";
-          if which oc > /dev/null && ibmcloud ks cluster get -c "${PIPELINE_KUBERNETES_CLUSTER_NAME}" --json | jq -e '.type=="openshift"' > /dev/null; then oc login -u apikey -p "${IBMCLOUD_API_KEY}" ; fi;
-          while read line; do export $line; done < /artifacts/build.properties;
-          cp /artifacts/build.properties .;
-          cd /workspace && source deploy-to-kubernetes.sh;
-      
+          echo "cleanup"
+---
