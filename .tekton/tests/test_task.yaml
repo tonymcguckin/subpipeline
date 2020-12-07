@@ -13,79 +13,69 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 1";
-          sleep 3s;
           echo "done!"
     - name: run-e2e-test-2
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 2";
           echo "done!"
     - name: run-e2e-test-3
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 3";
           echo "done!"
     - name: run-e2e-test-4
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 4";
           echo "done!"
     - name: run-e2e-test-5
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 5";
           echo "done!"
     - name: run-e2e-test-6
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 6";
           echo "done!"
     - name: run-e2e-test-7
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 7";
           echo "done!"
     - name: run-e2e-test-8
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 8";
           echo "done!"
     - name: run-e2e-test-9
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 9";
           echo "done!"
     - name: run-e2e-test-10
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "running test 1";
-          sleep 3s;
+          echo "running test 10";
           echo "done!"
 ---
 apiVersion: tekton.dev/v1beta1
