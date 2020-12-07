@@ -8,6 +8,13 @@ spec:
       description: the git repo
     - name: revision
       description: the branch for the git repo
+  stepTemplate:
+    env:
+      - name: BREAK_GLASS
+        valueFrom:
+          configMapKeyRef:
+            name: environment-properties
+            value: break_glass
   workspaces:
   - name: pipeline-pvc
   tasks:  
