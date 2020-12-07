@@ -83,7 +83,7 @@ spec:
   - name: task-pvc
     mountPath: /artifacts         
   steps:
-    - name: check-vulnerabilities
+    - name: deploy-with-kubectl
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
@@ -99,7 +99,7 @@ spec:
   - name: task-pvc
     mountPath: /artifacts         
   steps:
-    - name: check-vulnerabilities
+    - name: wait-until-deploy-done
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
@@ -115,7 +115,7 @@ spec:
   - name: task-pvc
     mountPath: /artifacts         
   steps:
-    - name: check-vulnerabilities
+    - name: cleanup
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
