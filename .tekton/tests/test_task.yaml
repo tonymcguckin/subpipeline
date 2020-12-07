@@ -13,7 +13,7 @@ spec:
           configMapKeyRef:
             name: environment-properties
             value: break_glass
-            optional: true       
+            optional: "true"       
   steps:
     - name: run-e2e-test-1
       image: ibmcom/pipeline-base-image
