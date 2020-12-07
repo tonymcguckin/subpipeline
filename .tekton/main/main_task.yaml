@@ -67,7 +67,7 @@ spec:
             echo "Running in reguar mode, will curl for pipeline to finish"
           else
             echo "Break glass mode detected"
-            while [ "$(kubectl get pipelinerun --selector=tekton.dev/pipeline=e2e-tests --selector=localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+            while [ "$(kubectl get pipelinerun --selector tekton.dev/pipeline=e2e-tests,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
               echo "Waiting for pipleinerun in $latestns to finish"
               sleep 5
             done
@@ -113,7 +113,7 @@ spec:
             echo "Running in reguar mode, will curl for pipeline to finish"
           else
             echo "Break glass mode detected"
-            while [ "$(kubectl get pipelinerun  --selector=tekton.dev/pipeline=deploy-pipeline --selector=localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+            while [ "$(kubectl get pipelinerun  --selector tekton.dev/pipeline=deploy-pipeline,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
               echo "Waiting for pipleinerun in $latestns to finish"
               sleep 5
             done
