@@ -121,13 +121,18 @@ spec:
   steps:
     - name: run-cleanup-tests
       image: ibmcom/pipeline-base-image
+      env:
+        - name: REPOSITORY
+          value: $(params.repository)
+        - name: REVISION
+          value: $(params.revision)     
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
           echo "Clean up tests";
           sleep 2s;
-          echo $(params.repository);
-          echo $(params.revision);
+          echo $RESPOSTIORY;
+          echo $REVISION;
           echo "done!"
 ---
 apiVersion: tekton.dev/v1beta1
