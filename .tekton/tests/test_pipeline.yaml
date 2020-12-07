@@ -26,14 +26,14 @@ spec:
     - name: run-cleanup-tests
       runAfter: [run-e2e-tests,run-api-tests]
       taskRef:
-        name: deploy-using-kubectl
+        name: run-cleanup-tests
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
     - name: cleanup
       runAfter: [run-cleanup-tests]
       taskRef:
-        name: deploy-using-kubectl
+        name: cleanup
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
