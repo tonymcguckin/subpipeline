@@ -108,13 +108,12 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "wait-for-deploy"
           if [[ -z "${BREAK_GLASS}" ]]; then
             echo "Running in reguar mode, will curl for pipeline to finish"
           else
             echo "Break glass mode detected"
             while [ "$(kubectl get pipelinerun --selector=localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
-              echo "Waiting for deploy pipleinerun to finish"
+              echo "Waiting for pipleinerun in $latestns to finish"
               sleep 5
             done
             echo "Done!"
