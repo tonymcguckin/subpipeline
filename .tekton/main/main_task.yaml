@@ -107,7 +107,8 @@ spec:
       image: ibmcom/pipeline-base-image
       command: ["/bin/bash", "-c"]
       args:
-        - set -e -o pipefail;
+        - |
+          set -e
           if [[ -z "${BREAK_GLASS}" ]]; then
             echo "Running in reguar mode, will curl for pipeline to finish"
           else
