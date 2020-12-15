@@ -44,6 +44,7 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
+          sleep 5m;
           echo "Launching test pipeline";
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
           echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path);
