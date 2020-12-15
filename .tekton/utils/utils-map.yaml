@@ -1,0 +1,307 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iam-utils
+data:
+  execute_or_skip.sh: |
+    #!/bin/bash
+    # common iam script to determine if this tasks is to be executed or skiped
+    # Tekon Env Inputs
+    #
+    # Shell inputs
+    #  EXECUTE_TASK
+    #
+    # Shell outputs
+    #  EXIT_CODE_PATH
+    #  STATUS_PATH
+    # common iam script runner
+    if [ "${EXECUTE_TASK}" == "no" ] ; then
+       echo "This micro-service is not configured for this task. Success. Exiting"
+       echo -n 0 > ${EXIT_CODE_PATH}
+       echo -n success >  ${STATUS_PATH}
+       exit 0
+    fi
+  setup_script_runner_env.sh: |
+    #!/bin/bash
+    # common iam script runner
+    # Tekon Env Inputs
+    #
+    # Shell inputs
+    #
+    # Shell outputs
+    #  EXIT_CODE_PATH
+    #  STATUS_PATH
+    # common iam script runner
+
+    if [ -d /secrets ] ; then
+      for i in /secrets/*
+      do
+         if [ -s $i ]; then
+            i_secret=$(cat "$i")
+            i_name=$(basename $i | tr '[a-z]-' '[A-Z]_')
+            echo -n "$i "
+            sum $i
+            echo "s/${i_secret//\//\\/}/***HIDDEN $i_name***/g" >> /steps/sed.secrets
+            echo "export ${i_name}=\"${i_secret}\"" >> /steps/_script_runner_env.sh
+         fi
+      done
+    else
+      echo -n >> /steps/sed.secrets
+    fi
+
+    ls -d /config-map
+    if [ -d /config-map ] ; then
+      for p in /config-map/*
+      do
+         if [ -s $p ]; then
+            p_value=$(cat "$p")
+            p_name=$(basename ${p} | tr '[a-z]-' '[A-Z]_')
+            echo "export ${p_name}=\"${p_value}\"" >> /steps/_script_runner_env.sh
+         fi
+      done
+    fi
+    printf "%s\n" "${CFGMAP_ENV}"  >> /steps/_script_runner_env.sh
+    printf "%s\n" "${TASK_ENV}"    >> /steps/_script_runner_env.sh
+    cat /steps/_script_runner_env.sh | sed -u -f /steps/sed.secrets
+
+## ----------------------------------------------------
+  script_runner.sh: |
+    #!/bin/bash
+    # common iam script runner
+    # Tekon Env Inputs
+    #  BUILD_NUMBER
+    #  PIPELINE_TRIGGERING_USER
+    #  PIPELINE_URL
+    #  PIPELINE_ID
+    #  PIPELINE_DEBUG
+    #  FAIL_ON_ERRORS
+    #
+    # Shell inputs
+    #  PUBLIC_PROPERTIES_FILE
+    #  IAM_PROPERTIES_FILE
+    #  TASK_SCRIPT
+    #  TASK_ENV
+    # Shell outputs
+    #  EXIT_CODE_PATH
+    #  STATUS_PATH
+    # common iam script runner
+
+    set -e -o pipefail
+
+    if [ ! -f /steps/_script_runner_env.sh ] ; then
+      for i in /secrets/*
+      do
+         if [ -s $i ]; then
+            i_secret=$(cat "$i")
+            i_name=$(basename $i | tr '[a-z]-' '[A-Z]_')
+            echo "s/${i_secret//\//\\/}/***HIDDEN $i_name***/g" >> /steps/sed.secrets
+         fi
+      done
+    else
+      echo -n >> /steps/sed.secrets
+    fi
+
+    source /steps/_script_runner_env.sh
+
+    function env_secure() {
+       env | sed -u -f /steps/sed.secrets
+    }
+
+    if [ "$PIPELINE_DEBUG" == "1" ]; then
+        env_secure
+        pwd
+        trap env_secure EXIT
+        set -x
+    fi
+
+
+    # export PIPELINE_TOOLCHAIN_ID=$(jq -r '.toolchain_guid' /artifacts/_toolchain.json)
+
+    ( set +e
+      if [ "$PUBLIC_PROPERTIES_FILE" -a -f ${PUBLIC_PROPERTIES_FILE} ]; then
+        source $PUBLIC_PROPERTIES_FILE
+        export $(cut -d= -f1 $PUBLIC_PROPERTIES_FILE | sed -e 's/export //g')
+      fi
+      if [ "$IAM_PROPERTIES_FILE" -a -f ${IAM_PROPERTIES_FILE} ]; then
+        echo "Sourcing $IAM_PROPERTIES_FILE"
+        cat $IAM_PROPERTIES_FILE
+        source $IAM_PROPERTIES_FILE
+        export $(cut -d= -f1 $IAM_PROPERTIES_FILE | sed -e 's/export //g')
+      fi
+      printf "#!/bin/bash\n" > /steps/task-script.sh
+      printf "%s\n" "${TASK_SCRIPT}" >> /steps/task-script.sh
+
+      chmod +x /steps/task-script.sh
+      if [ "${PIPELINE_DEBUG}" == "1" ]; then
+        echo "== cat /steps/task-script.sh =="
+        cat /steps/task-script.sh
+        echo "================================"
+      fi
+      /steps/task-script.sh
+      RESULT=$?
+      echo "RESULT=$RESULT"
+      echo -n $RESULT > ${EXIT_CODE_PATH}
+      echo "task-srcipt exit code: $RESULT"
+      if [ ${RESULT} -ne 0 ] ; then
+        echo -n failure > ${STATUS_PATH}
+        if [ "${FAIL_ON_ERRORS}" == "true" ]; then
+          exit $RESULT
+        fi
+        echo "fail-on-errors set to not stop pipeline"
+      else
+        echo -n success > ${STATUS_PATH}
+      fi) 2>&1 | sed -u -f /steps/sed.secrets
+    EXIT=${PIPESTATUS[0]}
+    echo "Script runner exiting:$EXIT"
+    exit $EXIT
+## ----------------------------------------------------
+  call_downstream_pipeline.sh: |
+    # call another pipeline and wait for a result
+    # Tekon Env Inputs
+    #  BUILD_NUMBER
+    #  PIPELINE_TRIGGERING_USER
+    #  PIPELINE_URL
+    #  PIPELINE_TRIGGERING_USER
+    #  PIPELINE_ID
+    #  PIPELINE_DEBUG
+    #  FAIL_ON_ERRORS
+    #
+    # Shell inputs
+    #  REGION
+    #  EVENT_PARAMS
+    #  EVENT_LISTENER
+    #  TARGET_PIPELINE_ID
+    # Shell outputs
+    #  EXIT_CODE_PATH
+    #  STATUS_PATH
+    cd /working-dir
+    set -e -o pipefail
+    if [ "${TARGET_PIPELINE_ID}" == "skip-it" ] ; then
+      echo "Skipping this task. Downstream TARGET_PIPELINE_ID set to 'skip-it'."
+      echo -n 0 > ${EXIT_CODE_PATH}
+      echo -n success >  ${STATUS_PATH}
+      echo "000" > $DOWNSTREAM_BUILD_NUMBER_PATH
+      exit 0
+    fi
+    if [ "${TARGET_PIPELINE_ID}" == "fail-it" ] ; then
+      echo "Failing this task. Downstream TARGET_PIPELINE_ID not provided."
+      echo -n 1 > ${EXIT_CODE_PATH}
+      echo -n failure >  ${STATUS_PATH}
+      exit 1
+    fi
+    if [ "${TEKTON_GATE}" != "0" ] ; then
+      echo "Skipping this task. Previous task requested we skip this task"
+      echo -n 0 > ${EXIT_CODE_PATH}
+      echo -n success >  ${STATUS_PATH}
+      exit 0
+    fi
+
+    function get_token() {
+      STATUS_CODE=$(curl --silent  -w "%{http_code}" -o token  -d "grant_type=urn:ibm:params:oauth:grant-type:apikey" -d apikey=$APIKEY https://iam.cloud.ibm.com/identity/token)
+      if [ "${STATUS_CODE}" != "200" ]; then
+         echo "Failed to get retrive a token : ${STATUS_CODE}"
+         echo -n "Token API returned: "
+         cat token
+         echo -n 1 > ${EXIT_CODE_PATH}
+         echo -n failure > ${STATUS_PATH}
+         exit 1
+      fi
+      TOKEN=$(jq -r .access_token token)
+    }
+    get_token
+
+    if [ "${PIPELINE_DEBUG}" == "1" ]; then
+        env
+        pwd
+        trap env EXIT
+        set -x
+    fi
+    export EVENT_LISTENER=${CUSTOM_EVENT_LISTENER:-$EVENT_LISTENER}
+
+    UPSTREAM_PARAMS="\"upstream-pipeline-build-number\":\"${BUILD_NUMBER}\",\"upstream-pipeline-id\":\"${PIPELINE_ID}\",\"upstream-pipeline-triggered-by\":\"${PIPELINE_TRIGGERING_USER}\",\"upstream-pipeline-url\":\"${PIPELINE_URL}\",\"upstream-pipeline-name\":\"${PIPELINE_NAME}\""
+    PAYLOAD="{\"eventListener\":${EVENT_LISTENER},\"eventParams\":{${UPSTREAM_PARAMS}${EVENT_PARAMS:+,$EVENT_PARAMS}}}"
+    URL="https://devops-api.${REGION}.devops.cloud.ibm.com/v1/tekton-pipelines/${TARGET_PIPELINE_ID}/runs"
+
+    echo "Starting pipelinerun on target pipeline: ${TARGET_PIPELINE_ID}"
+    echo "  API: $URL"
+    echo "  PAYLOAD: $PAYLOAD"
+
+    STATUS_CODE=$(curl --silent -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
+      -o job_start -d "${PAYLOAD}"  ${URL})
+    if [ "${STATUS_CODE}" != "201" ]; then
+       echo "Pipeline API failed with status code: ${STATUS_CODE}"
+       echo -n "API returned: "
+       cat job_start
+       echo -n 1 > ${EXIT_CODE_PATH}
+       echo -n failure > ${STATUS_PATH}
+       exit 1
+    fi
+
+
+    HTML_URL=$(jq -r '.html_url' job_start)
+    API_URL=$(jq -r '.url' job_start)
+    status=$(jq -r '.status.state' job_start)
+    jobid=$(jq -r '.id' job_start)
+
+    echo ""
+    echo "Pipeline run successfully started"
+    jq -c '.buildNumber, .status, .eventParams' job_start
+    jq -c '{pipelineId: .id}' job_start
+    echo "Browser URL: $HTML_URL"
+    echo "API URL: $API_URL"
+    echo ""
+    jq -r .buildNumber.buildNumber job_start > $DOWNSTREAM_BUILD_NUMBER_PATH
+    echo -n "waiting for pipeline run to complete: ."
+
+    while [ ${status} == "pending" -o ${status} == "running" -o ${status} == "queued" -o  ${status} == "waiting" ]
+    do
+       sleep 15
+       rm -f job_status
+       echo -n .
+       STATUS_CODE=$(curl --silent -w "%{http_code}" -o job_status -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN"  "$API_URL")
+       if [ "${STATUS_CODE}" == "200" ]; then
+          status=$(jq -r .status.state job_status)
+       elif [ "${STATUS_CODE}" == "403" ]; then
+          echo ""
+          cat job_status
+          terminating ....
+          echo -n 1 > ${EXIT_CODE_PATH}
+          echo -n failure > ${STATUS_PATH}
+          exit 0
+       else
+          echo ""
+          cat job_status
+          echo "Getting new token"
+          get_token
+       fi
+    done
+
+    echo ""
+    echo "Pipeline final status = ${status}"
+    jq -c '.buildNumber, .status, .userInfo' job_status
+    echo ""
+
+    echo "Pipeline Step results"
+    TASKS=`jq -r '.resources[] | select(.kind=="Pipeline" )| .spec.tasks[].name  ' job_status`
+    for TASK in $TASKS
+    do
+      STATE=$(jq  -r ".resources[] | select(.kind==\"TaskRun\" and  .metadata.labels.\"tekton.dev/pipelineTask\"==\"$TASK\" ) |
+        .metadata.annotations.\"devops.cloud.ibm.com/state\" " job_status )
+      STATE=${STATE:-not run}
+      echo "{\"${TASK}\": {\"state\":\"${STATE}\"}}"
+    done
+
+    if [ ${status} != "succeeded" ];
+    then
+      echo -n 1 > ${EXIT_CODE_PATH}
+      echo -n failure > ${STATUS_PATH}
+        if [ "${FAIL_ON_ERRORS}" == "true" ]; then
+          exit 1;
+        fi
+    else
+      echo -n 0 > ${EXIT_CODE_PATH}
+      echo -n success >  ${STATUS_PATH}
+    fi
+    exit 0
+## ----------------------------------------------------
