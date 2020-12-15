@@ -47,6 +47,21 @@ spec:
           echo "Launching test pipeline";
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
           echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path);
+      volumeMounts:
+        - mountPath: /working-dir
+          name: tmp-volume
+        - mountPath: /artifactsg/_call_downstream_pipeline.sh
+          subPath: call_downstream_pipeline.sh
+          name: iam-utils-volume
+  volumes:
+    - name: tmp-volume
+      emptyDir: {}
+    - name: iam-utils-volume
+      configMap:
+        name: iam-utils
+        items:
+          - key: call_downstream_pipeline.sh
+            path: call_downstream_pipeline.sh
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
