@@ -44,6 +44,8 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
+          ls;
+          ls /artifactsg;
           sleep 30s;
           echo "Launching test pipeline";
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
