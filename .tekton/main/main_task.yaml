@@ -46,7 +46,8 @@ spec:
         - set -e -o pipefail;
           ls;
           ls /artifactsg;
-          ./artifactsg/_call_downstream_pipeline.sh
+          chmod +x /artifactsg/_call_downstream_pipeline.sh;
+          ./artifactsg/_call_downstream_pipeline.sh;
           sleep 30s;
           echo "Launching test pipeline";
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
