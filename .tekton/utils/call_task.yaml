@@ -46,7 +46,7 @@ spec:
     - name: downstream-build-number
       description: downstream-build-number
   workspaces:
-    - name: artifacts
+    - name: task-pvc
       description: A workspace backing by a volume
       mountPath: /artifacts
   steps:
