@@ -21,14 +21,19 @@ spec:
           value: $(params.revision)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc  
+        workspace: pipeline-pvc 
     - name: wait-for-tests
       runAfter: [build-task]
       taskRef:
-        name: wait-for-tests
+        name: iam-call-pipeline-by-cfgmap
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc        
+        workspace: pipeline-pvc
+      params:
+      - name: target-pipeline-id-name
+        value: DEV_DEPLOY_TARGET_PIPELINE_ID
+      - name: task-cfgmap
+        value: call-deploy-pipeline
     - name: deploy
       runAfter: [wait-for-tests]
       taskRef:

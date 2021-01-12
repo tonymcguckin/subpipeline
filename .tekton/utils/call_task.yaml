@@ -1,0 +1,138 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: iam-call-pipeline-by-cfgmap
+spec:
+  params:
+    - name: tekton-gate
+      description: Skip this call. Fake conditional.
+      default: "0"
+    - name: task-cfgmap
+      description: Name
+    - name: event-params
+      description: eventParams of the target pipeline
+      default: ""
+    - name: region
+      description: devops region
+      default: us-south
+    - name: secret-key
+      default: "tekton-api-key"
+    - name: pipeline-secret
+      description: name of the secret containing secret values for the task
+      default: "secure-properties"
+    - name: pipeline-configmap
+      description: name of the pipeline configmap
+      default: environment-properties
+    - name: task-image
+      default: "ibmcom/pipeline-base-image:2.7"
+    - name: custom-event-listener
+      default: ""
+    - name: fail-on-errors
+      description: |
+        flag (`true` | `false`) to indicate if the task should fail or continue
+        on if the task-script fails
+      default: "false"
+    - name: pipeline-debug
+      description: Pipeline debug mode
+      default: "0"
+    - name: target-pipeline-id-name
+      default: "TARGET_PIPELINE_ID"
+  results:
+    - name: exit-code
+      description: The exit-code of the script
+    - name: status
+      description: The status code of the script
+    - name: downstream-build-number
+      description: downstream-build-number
+  workspaces:
+    - name: artifacts
+      description: A workspace backing by a volume
+      mountPath: /artifacts
+  steps:
+    - name: call-pipeline
+      image: $(params.task-image)
+      workingDir: /working-dir
+      env:
+        - name: BUILD_NUMBER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']
+        - name: PIPELINE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-id']
+        - name: PIPELINE_STAGE_EXECUTION_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/tekton-pipeline']
+        - name: PIPELINE_TRIGGERING_USER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+        - name: PIPELINE_URL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
+        - name: PIPELINE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tekton.dev/pipeline']
+        - name: EVENT_PARAMS
+          value: $(params.event-params)
+        - name: TEKTON_GATE
+          value: $(params.tekton-gate)
+        - name: APIKEY
+          valueFrom:
+            secretKeyRef:
+              name: $(params.pipeline-secret)
+              key: $(params.secret-key)
+        - name: REGION
+          valueFrom:
+            configMapKeyRef:
+              name: $(params.task-cfgmap)
+              key: region
+        - name: EVENT_LISTENER
+          valueFrom:
+            configMapKeyRef:
+              name: $(params.task-cfgmap)
+              key: pipeline-listener
+        - name: CUSTOM_EVENT_LISTENER
+          value: $(params.custom-event-listener)
+        - name: TARGET_PIPELINE_ID
+          valueFrom:
+            configMapKeyRef:
+              name: $(params.pipeline-configmap)
+              key: $(params.target-pipeline-id-name)
+        - name: EXIT_CODE_PATH
+          value: $(results.exit-code.path)
+        - name: STATUS_PATH
+          value: $(results.status.path)
+        - name: DOWNSTREAM_BUILD_NUMBER_PATH
+          value: $(results.downstream-build-number.path)
+        - name: FAIL_ON_ERRORS
+          value: $(params.fail-on-errors)
+        - name: PIPELINE_DEBUG
+          value: $(params.pipeline-debug)
+
+      command: ["/bin/bash", "/artifacts/_call_downstream_pipeline.sh"]
+
+      volumeMounts:
+        - mountPath: /working-dir
+          name: tmp-volume
+        - mountPath: /artifacts/_call_downstream_pipeline.sh
+          subPath: call_downstream_pipeline.sh
+          name: iam-utils-volume
+
+  volumes:
+    - name: tmp-volume
+      emptyDir: {}
+    - name: iam-utils-volume
+      configMap:
+        name: iam-utils
+        items:
+          - key: call_downstream_pipeline.sh
+            path: call_downstream_pipeline.sh
+    - name: pipeline-configmap
+      description: name of the pipeline configmap
+      default: environment-properties
