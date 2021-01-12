@@ -10,6 +10,13 @@ spec:
       description: the branch for the git repo
   resourcetemplates:
     - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: secure-properties
+      type: Opaque
+      stringData:
+        tekton-api-key: $(params.tekton-api-key)
+    - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
         name: pipelinerun-$(uid)-pvc
