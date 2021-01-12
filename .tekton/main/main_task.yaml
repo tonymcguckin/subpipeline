@@ -46,9 +46,6 @@ spec:
         - set -e -o pipefail;
           ls;
           ls /artifactsg;
-          chmod +x /artifactsg/_call_downstream_pipeline.sh;
-          ./artifactsg/_call_downstream_pipeline.sh;
-          sleep 30s;
           echo "Launching test pipeline";
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
           echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path);
