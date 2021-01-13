@@ -90,7 +90,7 @@ spec:
         - name: REGION
           value: "us-south"
         - name: EVENT_LISTENER
-          value: "test-listener"
+          value: "\"test-listener\""
         - name: CUSTOM_EVENT_LISTENER
           value: $(params.custom-event-listener)
         - name: TARGET_PIPELINE_ID
