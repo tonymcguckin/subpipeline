@@ -88,22 +88,13 @@ spec:
               name: $(params.pipeline-secret)
               key: $(params.secret-key)
         - name: REGION
-          valueFrom:
-            configMapKeyRef:
-              name: $(params.task-cfgmap)
-              key: region
+          value: "us-south"
         - name: EVENT_LISTENER
-          valueFrom:
-            configMapKeyRef:
-              name: $(params.task-cfgmap)
-              key: pipeline-listener
+          value: "main"
         - name: CUSTOM_EVENT_LISTENER
           value: $(params.custom-event-listener)
         - name: TARGET_PIPELINE_ID
-          valueFrom:
-            configMapKeyRef:
-              name: $(params.pipeline-configmap)
-              key: $(params.target-pipeline-id-name)
+          value: "15a887a0-c0b1-4a26-975f-3407c4b585a0"
         - name: EXIT_CODE_PATH
           value: $(results.exit-code.path)
         - name: STATUS_PATH
