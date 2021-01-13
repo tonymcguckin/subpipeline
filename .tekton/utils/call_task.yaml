@@ -20,7 +20,7 @@ spec:
       default: "tekton-api-key"
     - name: pipeline-secret
       description: name of the secret containing secret values for the task
-      default: "secure-properties"
+      default: "bog-properties"
     - name: pipeline-configmap
       description: name of the pipeline configmap
       default: environment-properties

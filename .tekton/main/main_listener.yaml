@@ -12,7 +12,7 @@ spec:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: secure-properties
+        name: bog-properties
       type: Opaque
       stringData:
         tekton-api-key: $(params.tekton-api-key)
