@@ -22,7 +22,7 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: wait-for-tests
+    - name: e2e-tests
       runAfter: [build-task]
       taskRef:
         name: iam-call-pipeline-by-cfgmap
@@ -39,7 +39,7 @@ spec:
       - name: event-listener
         value: "\"test-listener\""
     - name: deploy
-      runAfter: [wait-for-tests]
+      runAfter: [e2e-tests]
       taskRef:
         name: iam-call-pipeline-by-cfgmap
       workspaces:
@@ -54,15 +54,8 @@ spec:
         value: "9b40e24e-cfa2-48ab-afd2-ff419a1a5862"
       - name: event-listener
         value: "\"deploy-listener\""
-    - name: wait-for-deploy
-      runAfter: [deploy]
-      taskRef:
-        name: wait-for-deploy
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: cleanup
-      runAfter: [wait-for-deploy]
+      runAfter: [deploy]
       taskRef:
         name: cleanup
       workspaces:
