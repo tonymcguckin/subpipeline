@@ -13,9 +13,12 @@ spec:
     - name: event-params
       description: eventParams of the target pipeline
       default: ""
+    - name: event-listener
+      default: ""
     - name: region
       description: devops region
       default: us-south
+    - name: target-pipeline-id
     - name: secret-key
       default: "tekton-api-key"
     - name: pipeline-secret
@@ -88,13 +91,13 @@ spec:
               name: $(params.pipeline-secret)
               key: $(params.secret-key)
         - name: REGION
-          value: "us-south"
+          value: $(params.region)
         - name: EVENT_LISTENER
-          value: "\"test-listener\""
+          value: $(params.event-listener)
         - name: CUSTOM_EVENT_LISTENER
           value: $(params.custom-event-listener)
         - name: TARGET_PIPELINE_ID
-          value: "15a887a0-c0b1-4a26-975f-3407c4b585a0"
+          value: $(params.target-pipeline-id)
         - name: EXIT_CODE_PATH
           value: $(results.exit-code.path)
         - name: STATUS_PATH

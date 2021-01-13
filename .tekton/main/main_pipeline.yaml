@@ -34,6 +34,10 @@ spec:
         value: DEV_DEPLOY_TARGET_PIPELINE_ID
       - name: task-cfgmap
         value: call-deploy-pipeline
+      - name: target-pipeline-id
+        value: "15a887a0-c0b1-4a26-975f-3407c4b585a0"
+      - name: event-listener
+        value: "\"test-listener\""
     - name: deploy
       runAfter: [wait-for-tests]
       taskRef:
