@@ -38,7 +38,7 @@ spec:
       default: "false"
     - name: pipeline-debug
       description: Pipeline debug mode
-      default: "0"
+      default: "1"
     - name: target-pipeline-id-name
       default: "TARGET_PIPELINE_ID"
   results:
