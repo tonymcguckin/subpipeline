@@ -221,7 +221,12 @@ data:
 
     UPSTREAM_PARAMS="\"upstream-pipeline-build-number\":\"${BUILD_NUMBER}\",\"upstream-pipeline-id\":\"${PIPELINE_ID}\",\"upstream-pipeline-triggered-by\":\"${PIPELINE_TRIGGERING_USER}\",\"upstream-pipeline-url\":\"${PIPELINE_URL}\",\"upstream-pipeline-name\":\"${PIPELINE_NAME}\""
     PAYLOAD="{\"eventListener\":${EVENT_LISTENER},\"eventParams\":{${UPSTREAM_PARAMS}${EVENT_PARAMS:+,$EVENT_PARAMS}}}"
-    URL="https://devops-api.${REGION}.devops.cloud.ibm.com/v1/tekton-pipelines/${TARGET_PIPELINE_ID}/runs"
+
+    if [[ -z "${BREAK_GLASS}" ]]; then
+      URL="https://devops-api.${REGION}.devops.cloud.ibm.com/v1/tekton-pipelines/${TARGET_PIPELINE_ID}/runs"
+    else
+      URL="http://localhost:5555/v1/tekton-pipelines/${TARGET_PIPELINE_ID}/runs"
+    fi
 
     echo "Starting pipelinerun on target pipeline: ${TARGET_PIPELINE_ID}"
     echo "  API: $URL"
