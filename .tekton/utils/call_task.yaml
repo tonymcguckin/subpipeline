@@ -108,6 +108,12 @@ spec:
           value: $(params.fail-on-errors)
         - name: PIPELINE_DEBUG
           value: $(params.pipeline-debug)
+        - name: BREAK_GLASS
+          valueFrom:
+            configMapKeyRef:
+              name: environment-properties
+              key: break_glass
+              optional: true   
 
       command: ["/bin/bash", "/artifacts/_call_downstream_pipeline.sh"]
 
