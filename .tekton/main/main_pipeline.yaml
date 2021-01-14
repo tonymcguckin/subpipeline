@@ -40,7 +40,7 @@ spec:
         value: "\"test-listener\""
       - name: event-params
         value: |
-          "revision": "bog-branch", "different": "does it work"
+          "revision":"bog-branch","different":"does it work"
     - name: deploy
       runAfter: [e2e-tests]
       taskRef:
