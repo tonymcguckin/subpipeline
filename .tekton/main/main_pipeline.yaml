@@ -38,6 +38,9 @@ spec:
         value: "15a887a0-c0b1-4a26-975f-3407c4b585a0"
       - name: event-listener
         value: "\"test-listener\""
+      - name: event-params
+        value: |
+          "revision": "bog-branch", "different": "does it work"
     - name: deploy
       runAfter: [e2e-tests]
       taskRef:
