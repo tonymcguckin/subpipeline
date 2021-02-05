@@ -16,7 +16,7 @@ spec:
     mountPath: /artifacts
   steps:
     - name: deploy
-      image: ibmcom/pipeline-base-image
+      image: thebog/privatebog:alpine
       env:
         - name: CLUSTER
           value: $(params.cluster)
