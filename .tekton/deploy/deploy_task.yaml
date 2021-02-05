@@ -15,18 +15,6 @@ spec:
   - name: task-pvc
     mountPath: /artifacts
   steps:
-    - name: clone-repo
-      image: alpine/git
-      env:
-        - name: REPOSITORY
-          value: $(params.repository)
-        - name: REVISION
-          value: $(params.revision)
-      command: ["/bin/sh", "-c"]
-      args:
-        - set -e -o pipefail;
-          echo "Cloning $REPOSITORY";
-          cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
     - name: deploy
       image: ibmcom/pipeline-base-image
       env:
