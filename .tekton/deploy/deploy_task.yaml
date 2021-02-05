@@ -28,7 +28,7 @@ spec:
           echo "Cloning $REPOSITORY";
           cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
     - name: deploy
-      image: thebog/privatebog:alpine
+      image: ibmcom/pipeline-base-image
       env:
         - name: CLUSTER
           value: $(params.cluster)
