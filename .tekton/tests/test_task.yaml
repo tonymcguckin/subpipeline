@@ -102,9 +102,9 @@ spec:
         - set -e -o pipefail;
           for i in {0..15}
           do
-            echo "Running API tests..."
+            echo "Running API tests...";
             sleep 15s;
-            echo "done $i!"
+            echo "done $i!";
           done
 ---
 apiVersion: tekton.dev/v1beta1
