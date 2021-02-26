@@ -17,6 +17,7 @@ spec:
   steps:
     - name: deploy
       image: thebog/privatebog:alpine
+      imagePullPolicy: Always
       env:
         - name: CLUSTER
           value: $(params.cluster)
