@@ -26,6 +26,6 @@ spec:
         - set -e -o pipefail;
           echo "Deploying to $CLUSTER";
           sleep 5s;
-          echo "Small Pause!"
+          echo "Small Pause!";
           sleep 5s;
-          echo "Done!"
+          echo "Done!";
