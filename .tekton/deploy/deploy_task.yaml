@@ -25,8 +25,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "Deploying to $CLUSTER";
-          env
           sleep 5s;
-          env
+          echo "Small Pause!"
           sleep 5s;
           echo "Done!"
