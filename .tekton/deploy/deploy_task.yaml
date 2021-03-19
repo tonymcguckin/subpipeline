@@ -30,8 +30,8 @@ spec:
           sleep 5s;
           echo "Done!";
           for i in {1..180} ; do
-              cat - <<EOF
-          Starting: $i
+          cat - <<EOF
+          $i
           One
           Two
           Three
