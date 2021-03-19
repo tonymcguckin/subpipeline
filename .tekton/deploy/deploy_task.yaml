@@ -29,3 +29,14 @@ spec:
           echo "Small Pause!";
           sleep 5s;
           echo "Done!";
+          for i in {1..180} ; do
+              cat - <<EOF
+          Starting: $i
+          One
+          Two
+          Three
+          Four
+          Five
+          EOF
+              sleep 1
+          done
