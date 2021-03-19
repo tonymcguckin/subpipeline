@@ -30,13 +30,7 @@ spec:
           sleep 5s;
           echo "Done!";
           for i in {1..180} ; do
-          cat - <<EOF
-          $i
-          One
-          Two
-          Three
-          Four
-          Five
-          EOF
-              sleep 1
+          echo "Round $i"
+          ls
+          sleep 5s;
           done
