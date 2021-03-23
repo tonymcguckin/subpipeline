@@ -106,6 +106,8 @@ spec:
             env;
             sleep 10s;
             echo "done $i!";
+            echo "----";
+            echo "";
           done
 ---
 apiVersion: tekton.dev/v1beta1
