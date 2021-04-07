@@ -25,9 +25,9 @@ spec:
       args:
         - set -e -o pipefail;
           echo "Deploying to $CLUSTER";
-          sleep 5s;
+          sleep 1m;
           echo "Small Pause!";
-          sleep 5s;
+          sleep 1m;
           echo "Done!";
           for i in {1..10} ; do
           echo "Round $i";
