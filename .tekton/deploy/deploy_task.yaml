@@ -32,5 +32,5 @@ spec:
           for i in {1..10} ; do
           echo "Round $i";
           ls;
-          sleep 1s;
+          sleep 30s;
           done
