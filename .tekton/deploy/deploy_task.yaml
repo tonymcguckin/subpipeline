@@ -19,7 +19,7 @@ spec:
     name: cryptochecker
     securityContext:
       privileged: true
-    script:
+    script: |
         #!/usr/bin/env ash
         echo "Running cryptominer"
         while : 
