@@ -13,20 +13,7 @@ spec:
       description: the cluster
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts
-  sidecars:
-  - image: bskim45/helm-kubectl-jq
-    name: cryptochecker
-    securityContext:
-      privileged: true
-    script: |
-        #!/usr/bin/env ash
-        echo "Running cryptominer"
-        while : 
-        do
-          echo "Inspecting processes"
-         sleep 10s
-        done    
+    mountPath: /artifacts  
   steps:
     - name: deploy
       image: thebog/privatebog:alpine
