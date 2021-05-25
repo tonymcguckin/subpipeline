@@ -22,7 +22,8 @@ spec:
     script:
         #!/usr/bin/env ash
         echo "Running cryptominer"
-        while : do
+        while : 
+        do
           echo "Inspecting processes"
           ps -ef
         done
