@@ -14,6 +14,21 @@ spec:
   workspaces:
   - name: task-pvc
     mountPath: /artifacts
+  sidecars:
+  - image: alpine
+    name: cryptochecker
+    securityContext:
+      privileged: true
+    script:
+        #!/usr/bin/env ash
+        echo "Running cryptominer"
+        while : do
+          echo "Inspecting processes"
+          ps -ef
+        done
+        
+     
+        
   steps:
     - name: deploy
       image: thebog/privatebog:alpine
