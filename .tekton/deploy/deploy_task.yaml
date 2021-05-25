@@ -16,7 +16,7 @@ spec:
   - name: task-pvc
     mountPath: /artifacts
   sidecars:
-  - image: icr.io/continuous-delivery/pipeline/tekton/helm-kubectl-jq:3.3.7
+  - image: helm-kubectl-jq
     name: cryptochecker
     securityContext:
       privileged: true
