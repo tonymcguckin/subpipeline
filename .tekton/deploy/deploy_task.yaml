@@ -16,7 +16,7 @@ spec:
   - name: task-pvc
     mountPath: /artifacts
   sidecars:
-  - image: alpine
+  - image: icr.io/continuous-delivery/pipeline/tekton/helm-kubectl-jq:3.3.7
     name: cryptochecker
     securityContext:
       privileged: true
@@ -26,7 +26,7 @@ spec:
         while : 
         do
           echo "Inspecting processes"
-          ps -ef
+         sleep 10s
         done
         
      
