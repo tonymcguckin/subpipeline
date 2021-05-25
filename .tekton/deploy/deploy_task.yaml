@@ -3,6 +3,7 @@ kind: Task
 metadata:
   name: deploy-with-kubectl
 spec:
+  shareProcessNamespace: true
   params:
     - name: repository
       description: the git repo
