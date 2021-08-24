@@ -24,13 +24,10 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "Deploying to $CLUSTER";
-          sleep 1m;
+          echo "Deploying to $CLUSTER"
           echo "Small Pause!";
-          sleep 1m;
           echo "Done!";
           for i in {1..2} ; do
           echo "Round $i";
           ls;
-          sleep 5s;
           done
