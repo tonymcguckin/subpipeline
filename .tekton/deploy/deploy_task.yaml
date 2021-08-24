@@ -28,7 +28,7 @@ spec:
           echo "Small Pause!";
           echo "Done!";
           env;
-          sleep 5s;
+          sleep 12s;
           env;
           env;
           for i in {1..2} ; do
