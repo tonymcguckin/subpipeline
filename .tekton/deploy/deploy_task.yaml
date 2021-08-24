@@ -27,6 +27,30 @@ spec:
           echo "Deploying to $CLUSTER"
           echo "Small Pause!";
           echo "Done!";
+          env;
+          sleep 5s;
+          env;
+          env;
+          for i in {1..2} ; do
+          echo "Round $i";
+          sleep 10s;
+          ls;
+          done
+    - name: deploy2
+      image: thebog/privatebog:alpine
+      imagePullPolicy: Always
+      env:
+        - name: CLUSTER
+          value: $(params.cluster)
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Deploying to $CLUSTER"
+          ls;
+          ls;
+          env;
+          echo "Small Pause!";
+          echo "Done!";
           for i in {1..2} ; do
           echo "Round $i";
           sleep 10s;
