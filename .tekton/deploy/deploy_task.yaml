@@ -15,6 +15,16 @@ spec:
   - name: task-pvc
     mountPath: /artifacts
   steps:
+    - name: jerh-noop
+      image: thebog/privatebog:alpine
+      imagePullPolicy: Always
+      env:
+        - name: CLUSTER
+          value: $(params.cluster)
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Hi Jerh!"
     - name: deploy
       image: thebog/privatebog:alpine
       imagePullPolicy: Always
