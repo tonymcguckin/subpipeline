@@ -29,5 +29,6 @@ spec:
           echo "Done!";
           for i in {1..2} ; do
           echo "Round $i";
+          sleep 10s;
           ls;
           done
