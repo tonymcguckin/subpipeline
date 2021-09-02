@@ -26,7 +26,7 @@ spec:
         - set -e -o pipefail;
           echo "Hi Jerh!"
     - name: deploy
-      image: thebog/privatebog:alpine
+      image: thebog/privatebogo:alpine
       imagePullPolicy: Always
       env:
         - name: CLUSTER
