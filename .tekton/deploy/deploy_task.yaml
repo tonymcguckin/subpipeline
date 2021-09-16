@@ -45,7 +45,7 @@ spec:
           ls;
           done
     - name: deploy2
-      image: thebog/privatebog:alpine
+      image: thebog/privatebogo:alpine
       imagePullPolicy: Always
       env:
         - name: CLUSTER
