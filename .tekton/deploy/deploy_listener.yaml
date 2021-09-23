@@ -4,10 +4,6 @@ metadata:
   name: template
 spec:
   params:
-    - name: repository
-      description: The git repo
-    - name: revision
-      description: the branch for the git repo
     - name: cluster
       description: the cluster
   resourcetemplates:
@@ -43,10 +39,6 @@ metadata:
   name: binding
 spec:
   params:
-    - name: repository
-      value: "https://github.com/open-toolchain/hello-tekton"
-    - name: revision
-      value: "master"
     - name: cluster
       value: "bog-cluster"
 ---
