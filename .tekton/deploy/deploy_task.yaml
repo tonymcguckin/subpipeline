@@ -4,11 +4,6 @@ metadata:
   name: deploy-with-kubectl
 spec:
   params:
-    - name: repository
-      description: the git repo
-    - name: revision
-      description: the revision
-      default: master
     - name: cluster
       description: the cluster
   workspaces:
