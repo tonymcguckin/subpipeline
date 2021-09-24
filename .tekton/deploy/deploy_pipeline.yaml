@@ -5,6 +5,7 @@ metadata:
 spec:
   params:
     - name: cluster
+      type: string
       description: the cluster to deploy to
   workspaces:
   - name: pipeline-pvc
