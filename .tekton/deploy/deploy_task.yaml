@@ -3,23 +3,14 @@ kind: Task
 metadata:
   name: deploy-with-kubectl
 spec:
-  params:
-    - name: cluster
-      description: the cluster
-  workspaces:
-  - name: task-pvc
-    mountPath: /artifacts
   steps:
     - name: deploy
       image: thebog/privatebog:alpine
       imagePullPolicy: Always
-      env:
-        - name: CLUSTER
-          value: $(params.cluster)
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          echo "Deploying to $CLUSTER";
+          echo "Deploying to bog";
           sleep 1m;
           echo "Small Pause!";
           sleep 1m;
