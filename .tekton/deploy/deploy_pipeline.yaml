@@ -12,10 +12,4 @@ spec:
     - name: deploy-with-kubectl
       taskRef:
         name: deploy-with-kubectl
-      params:
-        - name: cluster
-          value: $(params.cluster)
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc  
 
