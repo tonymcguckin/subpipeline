@@ -5,6 +5,7 @@ metadata:
 spec:
   params:
     - name: cluster
+      type: string
       description: the cluster
   workspaces:
   - name: task-pvc
