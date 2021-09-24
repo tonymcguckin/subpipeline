@@ -3,11 +3,6 @@ kind: Pipeline
 metadata:
   name: deploy-pipeline
 spec:
-  params:
-    - name: cluster
-      description: the cluster to deploy to
-  workspaces:
-  - name: pipeline-pvc
   tasks:  
     - name: deploy-with-kubectl
       taskRef:
