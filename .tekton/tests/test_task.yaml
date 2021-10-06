@@ -105,7 +105,7 @@ spec:
             echo "Running API tests...";
             for j in {0..100};
             do
-              env
+              env;
             done
             env;
             sleep 3s;
