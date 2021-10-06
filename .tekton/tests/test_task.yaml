@@ -106,8 +106,7 @@ spec:
             for j in {0..100};
             do
               env;
-            done
-            env;
+            done;
             sleep 3s;
             echo "done $i!";
             echo "----";
