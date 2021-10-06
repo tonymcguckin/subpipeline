@@ -102,13 +102,14 @@ spec:
         - set -e -o pipefail;
           for i in {0..3};
           do
-            echo "Running API tests...";
-            for j in {0..500};
+            echo "BOG Running API tests...";
+            for j in {0..100};
             do
+              echo ">> $j";
               env;
             done;
             sleep 3s;
-            echo "done $i!";
+            echo "BOG done $i!";
             echo "----";
             echo "";
           done
