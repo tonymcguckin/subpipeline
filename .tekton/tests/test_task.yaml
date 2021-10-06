@@ -100,9 +100,13 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          for i in {0..50};
+          for i in {0..3};
           do
             echo "Running API tests...";
+            for j in {0..100};
+            do
+              env
+            done
             env;
             sleep 3s;
             echo "done $i!";
