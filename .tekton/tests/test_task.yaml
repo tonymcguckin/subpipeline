@@ -100,7 +100,7 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          for i in {0..50};
+          for i in {0..1};
           do
             echo "Running API tests...";
             env;
@@ -159,7 +159,7 @@ spec:
             optional: true        
   steps:
     - name: cleanup
-      image: ibmcom/pipeline-base-image
+      image: ibmcom/pipeline-base-imagere
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
