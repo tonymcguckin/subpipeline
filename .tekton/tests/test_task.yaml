@@ -21,6 +21,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 1";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-2
       image: ibmcom/pipeline-base-image
@@ -28,6 +29,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 2";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-3
       image: ibmcom/pipeline-base-image
@@ -35,6 +37,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 3";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-4
       image: ibmcom/pipeline-base-image
@@ -42,6 +45,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 4";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-5
       image: ibmcom/pipeline-base-image
@@ -49,6 +53,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 5";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-6
       image: ibmcom/pipeline-base-image
@@ -56,6 +61,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 6";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-7
       image: ibmcom/pipeline-base-image
@@ -63,6 +69,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 7";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-8
       image: ibmcom/pipeline-base-image
@@ -70,6 +77,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 8";
+          sleep 11s;
           echo "done!"
     - name: run-e2e-test-9
       image: ibmcom/pipeline-base-image
@@ -77,6 +85,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 9";
+          sleep 15s;
           echo "done!"
     - name: run-e2e-test-10
       image: ibmcom/pipeline-base-image
@@ -84,6 +93,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "running test 10";
+          sleep 17s;
           echo "done!"
 ---
 apiVersion: tekton.dev/v1beta1
@@ -136,7 +146,7 @@ spec:
       args:
         - set -e -o pipefail;
           echo "Clean up tests";
-          sleep 2s;
+          sleep 20s;
           echo $REPOSITORY;
           echo $REVISION;
           echo "done!"
@@ -164,4 +174,5 @@ spec:
       args:
         - set -e -o pipefail;
           env;
+          sleep 20s;
           echo "cleanup"
