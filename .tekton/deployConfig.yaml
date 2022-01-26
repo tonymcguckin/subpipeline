@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: game-config
-data:
-  PIPELINE_HIGH_MEM: "deploy-with-kubectl:1Gi" 
-  anoteherValue: "hi there" 
