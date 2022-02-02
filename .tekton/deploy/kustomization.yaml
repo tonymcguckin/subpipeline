@@ -14,19 +14,19 @@ generatorOptions:
 
 configMapGenerator:
 - name: environment-properties
-  env: properties/configs.env
+  env: configs.env
 
 secretGenerator:
   - name: secure-properties-file
     files:
-      - properties/secrets.env
+      - secrets.env
     type: Opaque
 
   - name: secure-properties-env
-    env: properties/secrets.env
+    env: secrets.env
     type: Opaque
 
   - name: registry-creds
     files:
-      - properties/dockersecret.json
+      - dockersecret.json
     type: kubernetes.io/dockerconfigjson
