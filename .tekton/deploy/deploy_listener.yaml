@@ -48,7 +48,7 @@ metadata:
   name: deploy-listener
 spec:
   triggers:
-    - binding:
-        name: binding
+      bindings:
+        - ref: binding
       template:
-        name: template
+        ref: template
