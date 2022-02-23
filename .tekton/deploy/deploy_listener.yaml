@@ -48,6 +48,7 @@ metadata:
   name: deploy-listener
 spec:
   triggers:
+    - name: bog-trig
       bindings:
         - ref: binding
       template:
