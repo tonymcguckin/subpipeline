@@ -17,11 +17,6 @@ configMapGenerator:
   env: configs.env
 
 secretGenerator:
-  - name: secure-properties-file
-    files:
-      - secrets.env
-    type: Opaque
-
   - name: secure-properties-env
     env: secrets.env
     type: Opaque
