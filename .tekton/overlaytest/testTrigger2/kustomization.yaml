@@ -1,0 +1,19 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base
+  - triggerExtraListener.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+- name: environment-properties
+  behavior: replace
+  env: configs.env
+- name: more-properties
+  behavior: create
+  env: more.env
+
