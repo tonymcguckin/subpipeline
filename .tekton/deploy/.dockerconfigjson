@@ -4,7 +4,7 @@
         "username": "your-name",
         "password": "your-pword",
         "email": "your-email",
-        "auth": "<Secret> generated base64 of username:password values printf \"asdf:asdasf\" | base64"
+        "auth": "{rootStore:secret/data/foo}"
       }
     }
   }
