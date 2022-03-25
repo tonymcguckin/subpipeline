@@ -1,10 +1,10 @@
 {
     "auths": {
-      "your-registry-server": {
-        "username": "your-name",
-        "password": "your-pword",
-        "email": "your-email",
-        "auth": "{rootStore:secret/data/foo}"
-      }
+        "your-registry-server": {
+            "username": "your-name",
+            "password": "your-pword",
+            "email": "your-email",
+            "auth": "{rootStore:generic/project/otc-setup/disconnected-agent/repoGithubToken}"
+        }
     }
-  }
+}
