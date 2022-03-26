@@ -1,10 +1,16 @@
 {
     "auths": {
-        "your-registry-server": {
+        "server1": {
             "username": "your-name",
-            "password": "your-pword",
+            "password": "your-password",
             "email": "your-email",
             "auth": "{rootStore:generic/project/otc-setup/disconnected-agent/repoGithubToken}"
+        },
+        "server2": {
+            "username": "your-name",
+            "password": "your-password",
+            "email": "your-email",
+            "auth": "{runtimeStore:generic/project/otc-setup/disconnected-agent/repoGithubToken}"
         }
     }
 }
