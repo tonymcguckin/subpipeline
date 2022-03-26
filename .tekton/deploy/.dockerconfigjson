@@ -4,13 +4,13 @@
             "username": "your-name",
             "password": "your-password",
             "email": "your-email",
-            "auth": "{rootStore:generic/project/otc-setup/disconnected-agent/repoGithubToken}"
+            "auth": "{rootStore:generic/project/otc-setup/disconnected-agent/secret1}"
         },
         "server2": {
             "username": "your-name",
             "password": "your-password",
             "email": "your-email",
-            "auth": "{runtimeStore:generic/project/otc-setup/disconnected-agent/repoGithubToken}"
+            "auth": "{runtimeStore:generic/project/otc-setup/disconnected-agent/secret2}"
         }
     }
 }
